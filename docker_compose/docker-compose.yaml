@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  db:
+    build: ./services/db
+    env_file:
+      - ./services/backend/.env
+    volumes:
+      - ./services/db/data:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+
+  app:
+    build: ./services/backend
+    env_file:
+      - ./services/backend/.env
+    ports:
+      - 8000:8000
+    depends_on:
+      - db

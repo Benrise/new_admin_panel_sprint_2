@@ -141,3 +141,4 @@ GitHub.sublime-settings
 
 # Mac OS Desktop Services Store
 *.DS_Store
+docker_compose/services/db/data
