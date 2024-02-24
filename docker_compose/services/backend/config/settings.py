@@ -89,5 +89,3 @@ LOCALE_PATHS = ['movies/locale']
 
 if DEBUG:
     INTERNAL_IPS = os.environ.get('INTERNAL_IPS').split(', ')
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-    INSTALLED_APPS += ['debug_toolbar']
