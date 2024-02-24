@@ -89,3 +89,5 @@ LOCALE_PATHS = ['movies/locale']
 
 if DEBUG:
     INTERNAL_IPS = os.environ.get('INTERNAL_IPS').split(', ')
+    INSTALLED_APPS.append('django_extensions')
+    SHELL_PLUS = "ipython"
