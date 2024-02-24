@@ -4,6 +4,7 @@ from . import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('movies.api.urls')),
 ]
 
 if settings.DEBUG:

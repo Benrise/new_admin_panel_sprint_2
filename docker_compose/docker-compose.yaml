@@ -27,7 +27,17 @@ services:
         condition: service_healthy
     volumes:
       - ./services/static:/opt/app/static
-  
+
+  swagger:
+    container_name: "docs"
+    image: swaggerapi/swagger-ui:v5.11.8
+    volumes:
+      - ./services/swagger/openapi.yaml:/swagger.yaml
+    env_file:
+      - ./services/backend/.env
+    ports:
+      - 8080:8080
+
   nginx:
     container_name: "nginx"
     restart: always
