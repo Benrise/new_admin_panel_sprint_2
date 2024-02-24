@@ -141,4 +141,9 @@ GitHub.sublime-settings
 
 # Mac OS Desktop Services Store
 *.DS_Store
+
+# Django's generated static files
+docker_compose/services/static
+
+# DB's generated data
 docker_compose/services/db/data

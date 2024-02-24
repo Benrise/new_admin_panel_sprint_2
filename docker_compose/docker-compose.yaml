@@ -1,6 +1,7 @@
 version: "3.7"
 services:
   db:
+    container_name: "db"
     build: ./services/db
     env_file:
       - ./services/backend/.env
@@ -8,12 +9,34 @@ services:
       - ./services/db/data:/var/lib/postgresql/data
     ports:
       - 5433:5432
+    healthcheck:
+        test: ["CMD", "psql", "-h", "localhost", "-U", "app", "-d", "movies_database"]
+        interval: 2s
+        timeout: 10s
+        retries: 10
 
   app:
+    container_name: "app"
     build: ./services/backend
     env_file:
       - ./services/backend/.env
     ports:
       - 8000:8000
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    volumes:
+      - ./services/static:/opt/app/static
+  
+  nginx:
+    container_name: "nginx"
+    restart: always
+    build: ./services/nginx
+    volumes:
+      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./services/nginx/configs:/etc/nginx/conf.d:ro
+      - ./services/static:/static/:ro
+    depends_on:
+      - app
+    ports:
+      - "80:80"

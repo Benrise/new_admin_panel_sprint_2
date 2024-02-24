@@ -6,13 +6,14 @@ COPY requirements.txt requirements.txt
 COPY uwsgi/uwsgi.ini uwsgi.ini
 
 RUN pip install --upgrade pip \
-    && pip install -r requirements.txt
+    && pip install -r requirements.txt \
+    && apt-get update && apt-get install -y mime-support
 
 COPY . .
+COPY ./docker-entrypoint.sh /usr/local/bin/
 
-# RUN python manage.py migrate \
-#     && python manage.py makesuperuser
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 8000
 
-ENTRYPOINT ["uwsgi", "--strict", "--ini", "uwsgi.ini"]
+ENTRYPOINT ["docker-entrypoint.sh"]
