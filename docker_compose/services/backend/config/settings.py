@@ -1,12 +1,7 @@
 import os
 from pathlib import Path
-import subprocess
-import time
-import django
 from dotenv import load_dotenv
 from split_settings.tools import include
-
-
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -84,9 +79,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 LOCALE_PATHS = ['movies/locale']
 
@@ -94,19 +91,3 @@ if DEBUG:
     INTERNAL_IPS = os.environ.get('INTERNAL_IPS').split(', ')
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
     INSTALLED_APPS += ['debug_toolbar']
-
-DATABASE_READY = False
-
-while not DATABASE_READY:
-    try:
-        django.db.connections['default'].ensure_connection()
-    except Exception:
-        time.sleep(1)
-    else:
-        DATABASE_READY = True
-
-if not DATABASE_READY:
-    print('Applying migrations...')
-    subprocess.run(["python", "manage.py migrate"])
-    print('Creating superuser...')
-    subprocess.run(["python", "manage.py makesuperuser"])
