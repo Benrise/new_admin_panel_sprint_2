@@ -117,6 +117,9 @@ LOGGING = {
 }
 
 if DEBUG:
-    INTERNAL_IPS = os.environ.get('INTERNAL_IPS').split(', ')
-    INSTALLED_APPS.append('django_extensions')
-    SHELL_PLUS = "ipython"
+    import socket
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[:-1] + '5' for ip in ips] + os.environ.get('INTERNAL_IPS').split(', ')
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    INSTALLED_APPS += ['debug_toolbar']
+    INSTALLED_APPS += ['django_extensions']
