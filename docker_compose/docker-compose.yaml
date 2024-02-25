@@ -13,7 +13,16 @@ services:
         test: ["CMD", "psql", "-h", "localhost", "-U", "app", "-d", "movies_database"]
         interval: 2s
         timeout: 10s
-        retries: 10
+        retries: 30
+
+  db-transfer:
+    container_name: "db-transfer"
+    build: ./services/db_transfer
+    env_file:
+      - ./services/backend/.env
+    depends_on:
+      app:
+        condition: service_healthy
 
   app:
     container_name: "app"
@@ -27,6 +36,11 @@ services:
         condition: service_healthy
     volumes:
       - ./services/static:/opt/app/static
+    healthcheck:
+      test: ["CMD-SHELL", "[ -e /opt/app/static ]"]
+      interval: 5s
+      timeout: 10s
+      retries: 15
 
   swagger:
     container_name: "docs"
@@ -37,6 +51,8 @@ services:
       - ./services/backend/.env
     ports:
       - 8080:8080
+    depends_on:
+      - app
 
   nginx:
     container_name: "nginx"
