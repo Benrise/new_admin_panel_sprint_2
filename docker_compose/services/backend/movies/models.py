@@ -21,7 +21,7 @@ class UUIDMixin(models.Model):
 
 class Genre(UUIDMixin, TimeStampedMixin):
     name = models.CharField(_('name'), max_length=255)
-    description = models.TextField(_('description'), blank=True)
+    description = models.TextField(_('description'), blank=True, null=True)
 
     class Meta:
         db_table = "content\".\"genre"
@@ -50,17 +50,18 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         TV_SHOW = "tv_show", _('tv_show')
 
     title = models.CharField(_('name'), max_length=255)
-    description = models.TextField(_('description'), blank=True)
-    creation_date = models.DateField(_('creation_date'), blank=True)
-    file_path = models.TextField(_('file_path'), blank=True)
+    description = models.TextField(_('description'), blank=True, null=True)
+    creation_date = models.DateField(_('creation_date'), blank=True, null=True)
+    file_path = models.TextField(_('file_path'), blank=True, null=True)
     rating = models.FloatField(_('rating'),
                                default=0.0,
                                validators=[MinValueValidator(0.0),
                                            MaxValueValidator(10)],
-                               blank=True)
+                               blank=True,
+                               null=True)
     type = models.CharField(_('type'), max_length=128, choices=Type.choices)
-    genres = models.ManyToManyField(Genre, through='GenreFilmwork')
-    persons = models.ManyToManyField(Person, through='PersonFilmwork')
+    genres = models.ManyToManyField(Genre, through='GenreFilmwork', null=True)
+    persons = models.ManyToManyField(Person, through='PersonFilmwork', null=True)
 
     class Meta:
         db_table = "content\".\"film_work"
