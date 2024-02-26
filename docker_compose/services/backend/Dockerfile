@@ -6,7 +6,7 @@ COPY requirements.txt requirements.txt
 COPY uwsgi/uwsgi.ini uwsgi.ini
 
 RUN pip install --upgrade pip \
-    && pip install -r requirements.txt \
+    && pip install --no-cache-dir -r requirements.txt \
     && apt-get update && apt-get install -y mime-support
 
 COPY . .

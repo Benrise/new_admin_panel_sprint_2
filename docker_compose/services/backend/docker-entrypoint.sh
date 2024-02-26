@@ -3,8 +3,6 @@
 
 python manage.py check --deploy
 
-python manage.py makemigrations --no-input
-
 python manage.py migrate --no-input
 
 python manage.py createsuperuser --no-input \

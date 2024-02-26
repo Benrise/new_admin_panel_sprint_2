@@ -4,7 +4,7 @@ from django.views.generic.detail import BaseDetailView
 from django.db.models import Q
 from django.contrib.postgres.aggregates import ArrayAgg
 
-from movies.models import Filmwork
+from movies.models import Filmwork, Role
 
 
 class FilmworkApiMixin:
@@ -20,17 +20,17 @@ class FilmworkApiMixin:
             actors=ArrayAgg(
                 'persons__full_name',
                 distinct=True,
-                filter=Q(personfilmwork__role='actor')
+                filter=Q(personfilmwork__role=Role.DIRECTOR),
             ),
             directors=ArrayAgg(
                 'persons__full_name',
                 distinct=True,
-                filter=Q(personfilmwork__role='director'),
+                filter=Q(personfilmwork__role=Role.DIRECTOR),
             ),
             writers=ArrayAgg(
                 'persons__full_name',
                 distinct=True,
-                filter=Q(personfilmwork__role='writer')
+                filter=Q(personfilmwork__role=Role.WRITER),
             ),
         )
         return qs

@@ -4,6 +4,17 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
 
 
+class Role(models.TextChoices):
+    DIRECTOR = 'director', _('Director')
+    WRITER = 'writer', _('Writer')
+    ACTOR = 'actor', _('Actor')
+
+
+class Type(models.TextChoices):
+    MOVIE = "movie", _('movie')
+    TV_SHOW = "tv_show", _('tv_show')
+
+
 class TimeStampedMixin(models.Model):
     created_at = models.DateTimeField(_('created_at'), auto_now_add=True)
     updated_at = models.DateTimeField(_('updated_at'), auto_now=True)
@@ -45,10 +56,6 @@ class Person(UUIDMixin, TimeStampedMixin):
 
 
 class Filmwork(UUIDMixin, TimeStampedMixin):
-    class Type(models.TextChoices):
-        MOVIE = "movie", _('movie')
-        TV_SHOW = "tv_show", _('tv_show')
-
     title = models.CharField(_('name'), max_length=255)
     description = models.TextField(_('description'), blank=True, null=True)
     creation_date = models.DateField(_('creation_date'), blank=True, null=True)
@@ -91,7 +98,7 @@ class PersonFilmwork(UUIDMixin):
                                   verbose_name=_('film_work'))
     person = models.ForeignKey('Person', on_delete=models.CASCADE,
                                verbose_name=_('person'))
-    role = models.TextField(_('role'))
+    role = models.CharField(_('role'), max_length=20, choices=Role.choices)
     created_at = models.DateTimeField(_('created_at'), auto_now_add=True)
 
     class Meta:
