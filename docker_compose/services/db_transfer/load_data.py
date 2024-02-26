@@ -179,7 +179,7 @@ if __name__ == "__main__":
         if RUN_TESTS:
             try:
                 print("Running tests...")
-                subprocess.run(["python", "tests/check_consistency/main.py"])
+                subprocess.run(["python3", "tests/check_consistency/main.py"])
             except Exception as e:
                 logging.error(f"Error on running tests: {e}")
     else:
